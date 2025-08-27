@@ -26,7 +26,8 @@ public class TiltSubsystem extends SubsystemBase{
     private static final double accelFeedForward = .05;
     private static final double rotationsPerDegree = 1;
     private static final double startingPointDegrees = 20;
-    private static final double tiltDangerZonePoint = 180; 
+    private static final double tiltDangerZoneStartPoint = 150; 
+    private static final double tiltDangerZoneEndPoint = 190; 
     private static final double maxSpeed = 0.5;
 
 
@@ -59,8 +60,10 @@ public class TiltSubsystem extends SubsystemBase{
         return (tiltMotor.getPosition().getValueAsDouble() * rotationsPerDegree) + startingPointDegrees;
     }
 
-    public boolean tiltInDangerZone() {
-        return getTiltPosition() >= tiltDangerZonePoint;
+    public boolean tiltCrossingOver(double target) {
+        boolean crossingFrontToBack = (getTiltPosition() < tiltDangerZoneStartPoint) && (target >= tiltDangerZoneStartPoint);
+        boolean crossingBackToFront = (getTiltPosition() > tiltDangerZoneEndPoint) && (target <= tiltDangerZoneStartPoint);
+        return crossingFrontToBack || crossingBackToFront;
     }
 
 
