@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.EndEffectorDefault;
 import frc.robot.commands.LiftAndTiltDefault;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.LiftAndTiltSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
@@ -39,6 +41,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final LiftAndTiltSubsystem liftAndTilt = new LiftAndTiltSubsystem();
+    public final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
 
 
 
@@ -62,6 +65,7 @@ public class RobotContainer {
         );
 
         liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt.lift, liftAndTilt.tilt, getTargetLevel()));
+        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector));
 
         driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driverJoystick.b().whileTrue(drivetrain.applyRequest(() ->

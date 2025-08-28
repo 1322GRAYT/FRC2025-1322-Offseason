@@ -5,6 +5,14 @@ import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
 
 public class LiftAndTiltDefault extends Command {
+    /* Wants of Command
+     
+     * Control both the lift and tilt subsystems
+     * Set the target point for both
+     * Run the PID Controllers for both
+     * Prevent the robot from destroying itself
+      
+     */
 
     private final LiftSubsystem lift;
     private final TiltSubsystem tilt;
