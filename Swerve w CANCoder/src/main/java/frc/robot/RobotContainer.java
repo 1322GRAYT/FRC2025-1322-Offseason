@@ -13,15 +13,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.EndEffectorDefault;
+import frc.robot.commands.EndEffectorScoring;
 import frc.robot.commands.LiftAndTiltDefault;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.LiftAndTiltSubsystem;
-import frc.robot.subsystems.LiftSubsystem;
-import frc.robot.subsystems.TiltSubsystem;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -76,6 +74,8 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         driverJoystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+        driverJoystick.rightTrigger().whileTrue(new EndEffectorScoring(endEffector));
+
         //drivetrain.registerTelemetry(logger::telemeterize);
     }
 
@@ -93,7 +93,7 @@ public class RobotContainer {
         else if (operatorJoystick.a().getAsBoolean()) targetLevel = 2;
         else if (operatorJoystick.b().getAsBoolean()) targetLevel = 3;
         else if (operatorJoystick.y().getAsBoolean()) targetLevel = 4;
-        else if (operatorJoystick.povDown().getAsBoolean()) targetLevel = 0;
+        else if (operatorJoystick.povDown().getAsBoolean() || !endEffector.doWeHaveGamePiece()) targetLevel = 0;
 
         return targetLevel;
     }
