@@ -8,10 +8,15 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.EndEffectorDefault;
 import frc.robot.commands.EndEffectorScoring;
@@ -41,10 +46,24 @@ public class RobotContainer {
     public final LiftAndTiltSubsystem liftAndTilt = new LiftAndTiltSubsystem();
     public final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
 
-
+    private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         configureBindings();
+
+        NamedCommands.registerCommand("Level 1", new InstantCommand(() -> setTargetLevel(1)));
+        NamedCommands.registerCommand("Level 2", new InstantCommand(() -> setTargetLevel(2)));
+        NamedCommands.registerCommand("Level 3", new InstantCommand(() -> setTargetLevel(3)));
+        NamedCommands.registerCommand("Level 4", new InstantCommand(() -> setTargetLevel(4)));
+        NamedCommands.registerCommand("Score", new EndEffectorScoring(endEffector));
+
+        // Build an auto chooser. This will use Commands.none() as the default option.
+        autoChooser = AutoBuilder.buildAutoChooser();
+
+        // Another option that allows you to specify the default auto by its name
+        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     private void configureBindings() {
@@ -98,7 +117,11 @@ public class RobotContainer {
         return targetLevel;
     }
 
+    public void setTargetLevel(int targetLevel) {
+        this.targetLevel = targetLevel;
+    }
+
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return autoChooser.getSelected();
     }
 }
