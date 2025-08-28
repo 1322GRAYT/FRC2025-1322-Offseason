@@ -7,6 +7,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TiltSubsystem extends SubsystemBase{
@@ -78,5 +79,16 @@ public class TiltSubsystem extends SubsystemBase{
 
     public void setPosition(double setPoint) {
         setPower(tilt.calculate(getTiltPosition(), setPoint));
+    }
+
+
+
+    @Override
+    public void periodic() {
+        smartDashboardOutput();
+    }
+
+    public void smartDashboardOutput() {
+        SmartDashboard.putNumber("Tilt Position", getTiltPosition());
     }
 }

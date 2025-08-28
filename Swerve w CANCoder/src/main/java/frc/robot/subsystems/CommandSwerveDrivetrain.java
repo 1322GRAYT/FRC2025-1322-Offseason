@@ -121,14 +121,21 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
 
-        double[] printPose = {getPose().getX(), getPose().getY(), getPose().getRotation().getRadians()};
-        SmartDashboard.putNumberArray("Robot Pose", printPose);
+        smartDashboardOutput();
         if (SmartDashboard.getBoolean("Update Robot Angle Using Vision?", true)) {
             updateRobotPoseMT1();
         } else {
             updateRobotPoseMT2();
         }
     }
+
+    public void smartDashboardOutput() {
+        double[] printPose = {getPose().getX(), getPose().getY(), getPose().getRotation().getRadians()};
+        SmartDashboard.putNumberArray("Robot Pose", printPose);
+    }
+
+
+
 
     public Pose2d getPose() {
         return this.getState().Pose;

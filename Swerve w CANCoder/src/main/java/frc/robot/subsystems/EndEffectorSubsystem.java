@@ -9,6 +9,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class EndEffectorSubsystem extends SubsystemBase{
@@ -136,6 +137,21 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
     public void runRollersDown() {
         setRollerPower(rollerDownSpeed);
+    }
+
+
+
+
+    @Override
+    public void periodic() {
+        smartDashboardOutput();
+    }
+
+    public void smartDashboardOutput() {
+        SmartDashboard.putBoolean("Top Sensor", getTopSensor());
+        SmartDashboard.putBoolean("Bottom Sensor", getBottomSensor());
+        SmartDashboard.putBoolean("Claw Opened", isClawOpen());
+        SmartDashboard.putBoolean("Claw Closed", isClawClosed());
     }
 
 }
