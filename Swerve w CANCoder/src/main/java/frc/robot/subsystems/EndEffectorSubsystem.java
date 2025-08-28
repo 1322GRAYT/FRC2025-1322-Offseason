@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,7 +31,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
 
     private TalonFX clawMotor = new TalonFX(clawMotorID);
-    private TalonFX rollerMotor = new TalonFX(clawMotorID);
+    private TalonFX rollerMotor = new TalonFX(rollerMotorID);
 
     private DigitalInput topSensor = new DigitalInput(topSensorID);
     private DigitalInput bottomSensor = new DigitalInput(bottomSensorID);
@@ -73,7 +75,25 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
 
 
+    public boolean isClawClosed() {
+        return clawMotor.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround;
+    }
 
+    public boolean isClawOpen() {
+        return clawMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
+    }
+
+    public boolean getTopSensor() {
+        return topSensor.get();
+    }
+
+    public boolean getBottomSensor() {
+        return bottomSensor.get();
+    }
+
+    public boolean haveGamePiece() {
+        return getTopSensor() || getBottomSensor();
+    }
 
 
 
