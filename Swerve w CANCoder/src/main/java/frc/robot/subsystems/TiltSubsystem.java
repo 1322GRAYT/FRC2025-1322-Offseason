@@ -73,7 +73,7 @@ public class TiltSubsystem extends SubsystemBase{
         power += staticFeedForward;
         power += accelFeedForward * tiltMotor.getAcceleration().getValueAsDouble();
 
-        if (power > maxSpeed) power = maxSpeed;
+        power = Math.min(power, maxSpeed);
         tiltMotor.set(power);
     }
 

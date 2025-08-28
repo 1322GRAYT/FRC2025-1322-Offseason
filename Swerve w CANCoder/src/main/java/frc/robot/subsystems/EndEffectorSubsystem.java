@@ -106,12 +106,12 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
 
     public void setClawPower(double power) {
-        if (power > maxSpeedClaw) power = maxSpeedClaw;
+        power = Math.min(power, maxSpeedClaw);
         clawMotor.set(power);
     }
 
     public void setRollerPower(double power) {
-        if (power > maxSpeedRoller) power = maxSpeedRoller;
+        power = Math.min(power, maxSpeedRoller);
         clawMotor.set(power);
     }
 

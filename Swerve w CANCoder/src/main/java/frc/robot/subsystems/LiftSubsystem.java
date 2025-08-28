@@ -71,7 +71,7 @@ public class LiftSubsystem extends SubsystemBase{
         power += staticFeedForward;
         power += accelFeedForward * liftMotor.getAcceleration().getValueAsDouble();
 
-        if (power > maxSpeed) power = maxSpeed;
+        power = Math.min(power, maxSpeed);
         liftMotor.set(power);
     }
 
