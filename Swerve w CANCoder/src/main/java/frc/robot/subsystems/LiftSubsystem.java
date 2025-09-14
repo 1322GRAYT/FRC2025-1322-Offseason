@@ -21,15 +21,17 @@ public class LiftSubsystem extends SubsystemBase{
 
     //Constants
     private static final int liftMotorID = 20;
-    private static final double kP = .001;
+    private static final double kP = 0.11;
     private static final double kI = 0;
-    private static final double kD = 0;
-    private static final double staticFeedForward = .05;
-    private static final double accelFeedForward = .05;
+    private static final double kD = 0.012;
+    private static final double staticFeedForward = .0;
+    private static final double accelFeedForward = .0;
     private static final double rotationsPerInch = 1;
-    private static final double startingPointInches = 20;
+    private static final double startingPointInches = 0;
     private static final double liftClearForRotationPoint = 30;
-    private static final double maxSpeed = 0.5;
+    private static final double maxSpeedUp = 1;
+    private static final double maxSpeedDown = -0.5;
+
 
 
     private PIDController liftPID = new PIDController(kP, kI, kD);
@@ -48,10 +50,10 @@ public class LiftSubsystem extends SubsystemBase{
         TalonFXConfiguration liftMotorConfig = new TalonFXConfiguration();
         liftMotorConfig.withCurrentLimits(liftCurrentLimit);
         liftMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        liftMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        liftMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         liftMotorConfig.Voltage.PeakForwardVoltage = 12;
         liftMotorConfig.Voltage.PeakReverseVoltage = -12;
-        liftMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.05;
+        liftMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.3;
         liftMotor.getConfigurator().apply(liftMotorConfig);
     }
 
@@ -71,7 +73,8 @@ public class LiftSubsystem extends SubsystemBase{
         power += staticFeedForward;
         power += accelFeedForward * liftMotor.getAcceleration().getValueAsDouble();
 
-        power = Math.min(power, maxSpeed);
+        if (power > 0) power = Math.min(power, maxSpeedUp);
+        if (power < 0) power = Math.max(power, maxSpeedDown);
         liftMotor.set(power);
     }
 

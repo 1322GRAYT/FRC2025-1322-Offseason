@@ -20,16 +20,16 @@ public class TiltSubsystem extends SubsystemBase{
 
     //Constants
     private static final int tiltMotorID = 30;
-    private static final double kP = .001;
+    private static final double kP = .1;
     private static final double kI = 0;
     private static final double kD = 0;
-    private static final double staticFeedForward = .05;
-    private static final double accelFeedForward = .05;
+    private static final double staticFeedForward = .0;
+    private static final double accelFeedForward = .0;
     private static final double rotationsPerDegree = 1;
-    private static final double startingPointDegrees = 20;
+    private static final double startingPointDegrees = 0;
     private static final double tiltDangerZoneStartPoint = 150; 
     private static final double tiltDangerZoneEndPoint = 190; 
-    private static final double maxSpeed = 0.5;
+    private static final double maxSpeed = 0.8;
 
 
     private PIDController tilt = new PIDController(kP, kI, kD);

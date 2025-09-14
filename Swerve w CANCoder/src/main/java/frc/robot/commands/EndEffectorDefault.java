@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
@@ -38,22 +39,25 @@ public class EndEffectorDefault extends Command {
         */
 
 
-        if (endEffector.getBothSensors()) {
+        // if (endEffector.getBothSensors()) {
             //Both see coral
             endEffector.closeClaw();
+            
             endEffector.setRollerPower(0);
-        } else if (endEffector.getTopSensor()) {
-            //Top sees coral
-            endEffector.openClaw();
-            endEffector.runRollersDown();
-        } else if (endEffector.getBottomSensor()) {
-            //Bottom sees coral
-            endEffector.closeClaw();
-            endEffector.runRollersUp();
-        } else {
-            endEffector.openClaw();
-            endEffector.setRollerPower(0);
-        }
+            //SmartDashboard.putNumber("Claw Power", -0.1);
+        // } else if (endEffector.getTopSensor()) {
+        //     //Top sees coral
+        //     endEffector.openClaw();
+        //     endEffector.runRollersDown();
+        // } else if (endEffector.getBottomSensor()) {
+        //     //Bottom sees coral
+        //     endEffector.closeClaw();
+        //     endEffector.runRollersUp();
+        // } else {
+        //     endEffector.openClaw();
+        //     endEffector.setRollerPower(0);
+        // }
+        
     }
 
     @Override

@@ -1,6 +1,10 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.LiftAndTiltSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.TiltSubsystem;
 
@@ -17,13 +21,13 @@ public class LiftAndTiltDefault extends Command {
     private final LiftSubsystem lift;
     private final TiltSubsystem tilt;
     private double targetLift, targetTilt = 0;
-    private int targetLevel = 0;
+    private Supplier<Integer> targetLevel;
     
-    public LiftAndTiltDefault(LiftSubsystem lift, TiltSubsystem tilt, int targetLevel) {
-        this.lift = lift;
-        this.tilt = tilt;
+    public LiftAndTiltDefault(LiftAndTiltSubsystem liftAndTilt, Supplier<Integer> targetLevel) {
+        this.lift = liftAndTilt.lift;
+        this.tilt = liftAndTilt.tilt;
         this.targetLevel = targetLevel;
-        addRequirements(lift, tilt);
+        addRequirements(liftAndTilt, lift, tilt);
     }
 
     @Override
@@ -34,18 +38,18 @@ public class LiftAndTiltDefault extends Command {
     @Override
     public void execute() {
         //Setting target position
-        switch (targetLevel) {
+        switch (targetLevel.get()) {
             case 1:
                 targetLift = 30;
                 targetTilt = 20;
                 break;
             case 2:
-                targetLift = 30;
-                targetTilt = 20;
+                targetLift = 40;
+                targetTilt = 30;
                 break;
             case 3:
-                targetLift = 30;
-                targetTilt = 20;
+                targetLift = 50;
+                targetTilt = 40;
                 break;
             case 4:
                 targetLift = 30;
@@ -54,27 +58,30 @@ public class LiftAndTiltDefault extends Command {
             default:
                 //At intake position until otherwise stated
                 targetLift = 30;
-                targetTilt = 210;
+                targetTilt = 20;
                 break;
 
         }
 
-
+        
         //Running PID Controllers
         //Needs to prevent running tilt axis while in danger zone, but still allow intaking
         //Needs to return to the safe zone for tilt axis if its trying to move to other side
-        if(tilt.tiltCrossingOver(targetTilt) && !lift.liftClearForRotation()) {
-            //Set lift to safe position
-            int tempLift = 30;
-            lift.setPosition(tempLift);
+        // if(tilt.tiltCrossingOver(targetTilt) && !lift.liftClearForRotation()) {
+        //     //Set lift to safe position
+        //     int tempLift = 30;
+        //     lift.setPosition(tempLift);
 
-            //Stop tilt
-            tilt.setPower(0);
-        } else {
+        //     //Stop tilt
+        //     tilt.setPower(0);
+        // } else {
             //Run the PID Controllers
-            lift.setPosition(targetLift);
+            // lift.setPosition(targetLift);
             tilt.setPosition(targetTilt);
-        }
+        //}
+
+        SmartDashboard.putNumber("Lift Target", targetLift);
+        SmartDashboard.putNumber("Tilt Target", targetTilt);
     }
 
     @Override

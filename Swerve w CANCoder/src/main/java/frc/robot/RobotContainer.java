@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.EndEffectorDefault;
 import frc.robot.commands.EndEffectorScoring;
 import frc.robot.commands.LiftAndTiltDefault;
+import frc.robot.commands.LiftAndTiltJoystick;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.EndEffectorSubsystem;
@@ -45,24 +46,24 @@ public class RobotContainer {
     public final LiftAndTiltSubsystem liftAndTilt = new LiftAndTiltSubsystem();
     public final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
 
-    private final SendableChooser<Command> autoChooser;
+    //private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
         configureBindings();
 
-        NamedCommands.registerCommand("Level 1", new InstantCommand(() -> setTargetLevel(1)));
-        NamedCommands.registerCommand("Level 2", new InstantCommand(() -> setTargetLevel(2)));
-        NamedCommands.registerCommand("Level 3", new InstantCommand(() -> setTargetLevel(3)));
-        NamedCommands.registerCommand("Level 4", new InstantCommand(() -> setTargetLevel(4)));
-        NamedCommands.registerCommand("Score", new EndEffectorScoring(endEffector));
+        // NamedCommands.registerCommand("Level 1", new InstantCommand(() -> setTargetLevel(1)));
+        // NamedCommands.registerCommand("Level 2", new InstantCommand(() -> setTargetLevel(2)));
+        // NamedCommands.registerCommand("Level 3", new InstantCommand(() -> setTargetLevel(3)));
+        // NamedCommands.registerCommand("Level 4", new InstantCommand(() -> setTargetLevel(4)));
+        // NamedCommands.registerCommand("Score", new EndEffectorScoring(endEffector));
 
-        // Build an auto chooser. This will use Commands.none() as the default option.
-        autoChooser = AutoBuilder.buildAutoChooser();
+        // // Build an auto chooser. This will use Commands.none() as the default option.
+        // autoChooser = AutoBuilder.buildAutoChooser();
 
-        // Another option that allows you to specify the default auto by its name
-        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+        // // Another option that allows you to specify the default auto by its name
+        // // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        // SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     private void configureBindings() {
@@ -80,7 +81,9 @@ public class RobotContainer {
             )
         );
 
-        liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt.lift, liftAndTilt.tilt, getTargetLevel()));
+        liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt, () -> getTargetLevel()));
+        // liftAndTilt.setDefaultCommand(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
+
         endEffector.setDefaultCommand(new EndEffectorDefault(endEffector));
 
         driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -120,7 +123,7 @@ public class RobotContainer {
         this.targetLevel = targetLevel;
     }
 
-    public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
-    }
+    // public Command getAutonomousCommand() {
+    //     return autoChooser.getSelected();
+    // }
 }
