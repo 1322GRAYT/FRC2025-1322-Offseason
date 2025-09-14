@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,14 +24,14 @@ public class TiltSubsystem extends SubsystemBase{
     private static final int tiltMotorID = 30;
     private static final double kP = .1;
     private static final double kI = 0;
-    private static final double kD = 0;
+    private static final double kD = 0.001;
     private static final double staticFeedForward = .0;
     private static final double accelFeedForward = .0;
     private static final double rotationsPerDegree = 1;
     private static final double startingPointDegrees = 0;
-    private static final double tiltDangerZoneStartPoint = 150; 
-    private static final double tiltDangerZoneEndPoint = 190; 
-    private static final double maxSpeed = 0.8;
+    private static final double tiltDangerZoneStartPoint = 70; 
+    private static final double tiltDangerZoneEndPoint = 90; 
+    private static final double maxSpeed = 1;
 
 
     private PIDController tilt = new PIDController(kP, kI, kD);
@@ -67,6 +69,10 @@ public class TiltSubsystem extends SubsystemBase{
         return crossingFrontToBack || crossingBackToFront;
     }
 
+    
+    public boolean getRearLimit() {
+        return tiltMotor.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround;
+    }
 
 
     public void setPower(double power) {

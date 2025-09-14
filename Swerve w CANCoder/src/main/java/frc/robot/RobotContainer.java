@@ -83,8 +83,8 @@ public class RobotContainer {
 
         liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt, () -> getTargetLevel()));
         // liftAndTilt.setDefaultCommand(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
-
-        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector));
+        
+        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector, () -> liftAndTilt.tilt.getRearLimit()));
 
         driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driverJoystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -114,7 +114,7 @@ public class RobotContainer {
         else if (operatorJoystick.a().getAsBoolean()) targetLevel = 2;
         else if (operatorJoystick.b().getAsBoolean()) targetLevel = 3;
         else if (operatorJoystick.y().getAsBoolean()) targetLevel = 4;
-        else if (operatorJoystick.povDown().getAsBoolean() || !endEffector.doWeHaveGamePiece()) targetLevel = 0;
+        //else if (operatorJoystick.povDown().getAsBoolean() || !endEffector.doWeHaveGamePiece()) targetLevel = 0;
 
         return targetLevel;
     }

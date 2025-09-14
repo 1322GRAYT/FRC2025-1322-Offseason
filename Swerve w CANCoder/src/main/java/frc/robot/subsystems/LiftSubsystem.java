@@ -22,13 +22,15 @@ public class LiftSubsystem extends SubsystemBase{
     //Constants
     private static final int liftMotorID = 20;
     private static final double kP = 0.11;
-    private static final double kI = 0;
+    private static final double kI = 0.0;
     private static final double kD = 0.012;
     private static final double staticFeedForward = .0;
     private static final double accelFeedForward = .0;
     private static final double rotationsPerInch = 1;
     private static final double startingPointInches = 0;
-    private static final double liftClearForRotationPoint = 30;
+    private static final double liftClearForRotationStartPoint = 65;
+    private static final double liftClearForRotationEndPoint = 85
+    ;
     private static final double maxSpeedUp = 1;
     private static final double maxSpeedDown = -0.5;
 
@@ -64,7 +66,7 @@ public class LiftSubsystem extends SubsystemBase{
     }
 
     public boolean liftClearForRotation() {
-        return getLiftPosition() >= liftClearForRotationPoint;
+        return getLiftPosition() >= liftClearForRotationStartPoint && getLiftPosition() <= liftClearForRotationEndPoint;
     }
 
 

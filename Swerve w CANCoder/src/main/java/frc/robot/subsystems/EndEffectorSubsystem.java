@@ -26,8 +26,8 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private static final int rollerMotorID = 41;
     private static final int topSensorID = 0;
     private static final int bottomSensorID = 1;
-    private static final double closeClawSpeed = 0.2;
-    private static final double openClawSpeed = -0.2;
+    private static final double closeClawSpeed = 1;
+    private static final double openClawSpeed = -1;
     private static final double rollerUpSpeed = 0.5;
     private static final double rollerDownSpeed = -0.5;
     private static final double maxSpeedClaw = 1;
@@ -88,11 +88,11 @@ public class EndEffectorSubsystem extends SubsystemBase{
     }
 
     public boolean getTopSensor() {
-        return topSensor.get();
+        return !topSensor.get();
     }
 
     public boolean getBottomSensor() {
-        return bottomSensor.get();
+        return !bottomSensor.get();
     }
 
     public boolean doWeHaveGamePiece() {

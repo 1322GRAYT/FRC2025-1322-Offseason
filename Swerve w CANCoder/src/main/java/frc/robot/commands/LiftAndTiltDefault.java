@@ -40,25 +40,25 @@ public class LiftAndTiltDefault extends Command {
         //Setting target position
         switch (targetLevel.get()) {
             case 1:
-                targetLift = 30;
-                targetTilt = 20;
+                targetLift = 68;
+                targetTilt = 135;
                 break;
             case 2:
-                targetLift = 40;
-                targetTilt = 30;
+                targetLift = 60;
+                targetTilt = 10;
                 break;
             case 3:
-                targetLift = 50;
-                targetTilt = 40;
+                targetLift = 90;
+                targetTilt = 10;
                 break;
             case 4:
-                targetLift = 30;
-                targetTilt = 20;
+                targetLift = 143;
+                targetTilt = 10;
                 break;
             default:
                 //At intake position until otherwise stated
-                targetLift = 30;
-                targetTilt = 20;
+                targetLift = 60;
+                targetTilt = 10;
                 break;
 
         }
@@ -67,18 +67,19 @@ public class LiftAndTiltDefault extends Command {
         //Running PID Controllers
         //Needs to prevent running tilt axis while in danger zone, but still allow intaking
         //Needs to return to the safe zone for tilt axis if its trying to move to other side
-        // if(tilt.tiltCrossingOver(targetTilt) && !lift.liftClearForRotation()) {
-        //     //Set lift to safe position
-        //     int tempLift = 30;
-        //     lift.setPosition(tempLift);
+        if(tilt.tiltCrossingOver(targetTilt) && !lift.liftClearForRotation()) {
+            //Set lift to safe position
+            int tempLift = 75;
+            lift.setPosition(tempLift);
 
-        //     //Stop tilt
-        //     tilt.setPower(0);
-        // } else {
+            //Stop tilt
+            tilt.setPower(0);
+        } else {
             //Run the PID Controllers
-            // lift.setPosition(targetLift);
+            //targetLift = 80;
+            lift.setPosition(targetLift);
             tilt.setPosition(targetTilt);
-        //}
+        }
 
         SmartDashboard.putNumber("Lift Target", targetLift);
         SmartDashboard.putNumber("Tilt Target", targetTilt);
