@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffectorSubsystem;
 
-public class EndEffectorScoring extends Command {
+public class EndEffectorLevel1 extends Command {
     /* Wants of Command
      
      * Claw is open at end of fire to help L4 score
@@ -14,7 +14,7 @@ public class EndEffectorScoring extends Command {
 
     private final EndEffectorSubsystem endEffector;
 
-    public EndEffectorScoring(EndEffectorSubsystem endEffector) {
+    public EndEffectorLevel1(EndEffectorSubsystem endEffector) {
         this.endEffector = endEffector;
         addRequirements(endEffector);
     }
@@ -35,16 +35,8 @@ public class EndEffectorScoring extends Command {
             Rollers running to score and claw open
         */
 
-
-        if (endEffector.getBothSensors()) {
-            //Both see coral
-            endEffector.closeClaw();
-            endEffector.runRollersDown();
-        } else{
-            //Bottom sees coral
-            endEffector.openClaw();
-            endEffector.runRollersDown();
-        }
+       
+        endEffector.openClaw();
     }
 
     @Override

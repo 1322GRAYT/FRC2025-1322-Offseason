@@ -14,6 +14,8 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -208,5 +210,88 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             mt2.pose,
             Utils.fpgaToCurrentTime(mt2.timestampSeconds));
         }
+    }
+
+    //Auto align
+
+    // Red Reef
+    private static final Pose2d TAG_SIX = new Pose2d(Units.inchesToMeters(530.49), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-60));
+    private static final Pose2d TAG_SEVEN = new Pose2d(Units.inchesToMeters(546.87), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(0));
+    private static final Pose2d TAG_EIGHT = new Pose2d(Units.inchesToMeters(530.49), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(60));
+    private static final Pose2d TAG_NINE = new Pose2d(Units.inchesToMeters(497.77), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(120));
+    private static final Pose2d TAG_TEN = new Pose2d(Units.inchesToMeters(481.39), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(180));
+    private static final Pose2d TAG_ELEVEN = new Pose2d(Units.inchesToMeters(497.77 ), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-120));
+    
+    // Blue Reef
+    private static final Pose2d TAG_SEVENTEEN = new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-120));
+    private static final Pose2d TAG_EIGHTEEN = new Pose2d(Units.inchesToMeters(144.00), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(180));
+    private static final Pose2d TAG_NINETEEN = new Pose2d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(120));
+    private static final Pose2d TAG_TWENTY = new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83), Rotation2d.fromDegrees(60));
+    private static final Pose2d TAG_TWENTY_ONE = new Pose2d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.50), Rotation2d.fromDegrees(0));
+    private static final Pose2d TAG_TWENTY_TWO = new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-60));
+
+    //Offsets to branch
+    private static final double tagToLeftBranch = Units.inchesToMeters(-6);
+    private static final double tagToRightBranch = Units.inchesToMeters(6);
+    private static final double targetDistanceFromTag = Units.inchesToMeters(15);
+
+    private static final double leftBoundOfReef = (TAG_SIX.getY() + TAG_SEVEN.getY()) / 2;
+    private static final double rightBoundOfReef = (TAG_EIGHT.getY() + TAG_SEVEN.getY()) / 2;
+
+    private boolean isLeftBranch = true;
+
+    public void setLeftOrRightBranch(boolean isLeftBranch) {
+        this.isLeftBranch = isLeftBranch;
+    }
+
+    public Pose2d closestBranch() {
+        Pose2d outputPose;
+        //Varible is 0, 1, or 2, for left, middle, or right side of field
+        int yPosOnField;
+        if (getPose().getY() < leftBoundOfReef) yPosOnField = 0;
+        else if (getPose().getY() > rightBoundOfReef) yPosOnField = 2;
+        else yPosOnField = 1;
+
+
+        //Sets our output pose to the closest side of the reef
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+            switch (yPosOnField) {
+                case 0:
+                    if (getPose().getX() > (TAG_SEVENTEEN.getX() + TAG_TWENTY_TWO.getX()) / 2) outputPose = TAG_TWENTY_TWO;
+                    else outputPose = TAG_SEVENTEEN;
+                    break;
+                case 1:
+                    if (getPose().getX() > (TAG_EIGHTEEN.getX() + TAG_TWENTY_ONE.getX()) / 2) outputPose = TAG_TWENTY_ONE;
+                    else outputPose = TAG_EIGHTEEN;
+                    break;
+                default:
+                    if (getPose().getX() > (TAG_NINETEEN.getX() + TAG_TWENTY.getX()) / 2) outputPose = TAG_TWENTY;
+                    else outputPose = TAG_NINETEEN;
+                    break;
+            }
+        } else {
+            switch (yPosOnField) {
+                case 0:
+                    if (getPose().getX() > (TAG_SIX.getX() + TAG_ELEVEN.getX()) / 2) outputPose = TAG_SIX;
+                    else outputPose = TAG_ELEVEN;
+                    break;
+                case 1:
+                    if (getPose().getX() > (TAG_SEVEN.getX() + TAG_TEN.getX()) / 2) outputPose = TAG_SEVEN;
+                    else outputPose = TAG_TEN;
+                    break;
+                default:
+                    if (getPose().getX() > (TAG_EIGHT.getX() + TAG_NINE.getX()) / 2) outputPose = TAG_EIGHT;
+                    else outputPose = TAG_NINE;
+                    break;
+            }
+        }
+
+        outputPose.transformBy(new Transform2d(
+            isLeftBranch ? tagToLeftBranch : tagToRightBranch, //Left or Right
+            targetDistanceFromTag, //Offset back from reef
+            outputPose.getRotation()
+        ));
+
+        return outputPose;
     }
 }
