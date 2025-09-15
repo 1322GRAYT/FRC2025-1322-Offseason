@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.signals.ReverseLimitValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LiftAndTiltSubsystem extends SubsystemBase{
