@@ -104,7 +104,6 @@ public class RobotContainer {
         //deadband of .1
         if (Math.abs(input) < .1) return 0;
 
-        System.out.println(Math.copySign((Math.abs(input) - .1 ) / (1 - .1), input));
         return Math.copySign((Math.abs(input) - .1 ) / (1 - .1), input);
         
     }
@@ -114,7 +113,7 @@ public class RobotContainer {
         else if (operatorJoystick.a().getAsBoolean()) targetLevel = 2;
         else if (operatorJoystick.b().getAsBoolean()) targetLevel = 3;
         else if (operatorJoystick.y().getAsBoolean()) targetLevel = 4;
-        //else if (operatorJoystick.povDown().getAsBoolean() || !endEffector.doWeHaveGamePiece()) targetLevel = 0;
+        else if (operatorJoystick.povDown().getAsBoolean() || !endEffector.doWeHaveGamePiece()) targetLevel = 0;
 
         return targetLevel;
     }

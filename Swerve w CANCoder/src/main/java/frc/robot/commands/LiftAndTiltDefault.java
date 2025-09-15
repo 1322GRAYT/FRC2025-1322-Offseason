@@ -42,8 +42,8 @@ public class LiftAndTiltDefault extends Command {
         //Setting target position
         switch (targetLevel.get()) {
             case 1:
-                targetLift = 68;
-                targetTilt = 135;
+                targetLift = 60;
+                targetTilt = 70;
                 break;
             case 2:
                 targetLift = 60;
@@ -59,8 +59,8 @@ public class LiftAndTiltDefault extends Command {
                 break;
             default:
                 //At intake position until otherwise stated
-                targetLift = 60;
-                targetTilt = 10;
+                targetLift = 68;
+                targetTilt = 135;
                 break;
 
         }
