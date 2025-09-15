@@ -18,12 +18,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoAlignCommand;
+import frc.robot.commands.ClimberDefault;
 import frc.robot.commands.EndEffectorDefault;
 import frc.robot.commands.EndEffectorLevel1;
 import frc.robot.commands.EndEffectorScoring;
 import frc.robot.commands.LiftAndTiltDefault;
 import frc.robot.commands.LiftAndTiltJoystick;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.EndEffectorSubsystem;
 import frc.robot.subsystems.LiftAndTiltSubsystem;
@@ -47,6 +49,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final LiftAndTiltSubsystem liftAndTilt = new LiftAndTiltSubsystem();
     public final EndEffectorSubsystem endEffector = new EndEffectorSubsystem();
+    public final ClimberSubsystem climber = new ClimberSubsystem();
 
     //private final SendableChooser<Command> autoChooser;
 
@@ -85,8 +88,14 @@ public class RobotContainer {
 
         liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt, () -> getTargetLevel(), () -> endEffector.isClawClosed()));
         // liftAndTilt.setDefaultCommand(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
-        
+
         endEffector.setDefaultCommand(new EndEffectorDefault(endEffector, () -> liftAndTilt.tilt.tiltCrossingOver()));
+
+        climber.setDefaultCommand(new ClimberDefault(climber, () -> driverJoystick.y().getAsBoolean()));
+
+
+
+
 
         driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driverJoystick.b().whileTrue(drivetrain.applyRequest(() ->
@@ -107,6 +116,9 @@ public class RobotContainer {
         operatorJoystick.povLeft().onTrue(new InstantCommand(() -> drivetrain.setLeftOrRightBranch(true)));
         operatorJoystick.povRight().onTrue(new InstantCommand(() -> drivetrain.setLeftOrRightBranch(false)));
 
+        operatorJoystick.rightBumper().onTrue(new InstantCommand(() -> climber.climbMode = true));
+        operatorJoystick.leftBumper().whileTrue(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
+
         //drivetrain.registerTelemetry(logger::telemeterize);
     }
 
@@ -119,7 +131,7 @@ public class RobotContainer {
     }
 
     public int getTargetLevel() {
-        if (operatorJoystick.x().getAsBoolean()) targetLevel = 1;
+        if (operatorJoystick.x().getAsBoolean() || climber.climbMode) targetLevel = 1;
         else if (operatorJoystick.a().getAsBoolean()) targetLevel = 2;
         else if (operatorJoystick.b().getAsBoolean()) targetLevel = 3;
         else if (operatorJoystick.y().getAsBoolean()) targetLevel = 4;

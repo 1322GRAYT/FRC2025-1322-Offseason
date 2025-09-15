@@ -212,7 +212,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
-    //Auto align
+
+
+
+
+
+    ////////////////////////////////////// Auto align ////////////////////////////////////////////////////////////////
 
     // Red Reef
     private static final Pose2d TAG_SIX = new Pose2d(Units.inchesToMeters(530.49), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-60));
