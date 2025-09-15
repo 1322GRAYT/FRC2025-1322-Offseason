@@ -18,7 +18,6 @@ public class LiftAndTiltJoystick extends Command {
 
     private final LiftSubsystem lift;
     private final TiltSubsystem tilt;
-    private double targetLift, targetTilt = 0;
     private CommandXboxController operator;
     
     public LiftAndTiltJoystick(LiftAndTiltSubsystem liftAndTilt, CommandXboxController operator) {

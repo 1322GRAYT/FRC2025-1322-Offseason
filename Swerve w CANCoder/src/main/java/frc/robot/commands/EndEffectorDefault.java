@@ -16,11 +16,11 @@ public class EndEffectorDefault extends Command {
      */
 
     private final EndEffectorSubsystem endEffector;
-    private Supplier<Boolean> tiltLimit;
+    private Supplier<Boolean> tiltCrossingOver;
 
-    public EndEffectorDefault(EndEffectorSubsystem endEffector, Supplier<Boolean> tiltLimit) {
+    public EndEffectorDefault(EndEffectorSubsystem endEffector, Supplier<Boolean> tiltCrossingOver) {
         this.endEffector = endEffector;
-        this.tiltLimit = tiltLimit;
+        this.tiltCrossingOver = tiltCrossingOver;
         addRequirements(endEffector);
     }
 
@@ -31,22 +31,38 @@ public class EndEffectorDefault extends Command {
 
     @Override
     public void execute() {
-        /* Four states to be accounted for 
-         * 1. Neither sensor detects coral
-            Rollers need to be off and claw open
-         * 2. Both sensors dectect coral
-            Rollers off and claw closed
-         * 3. Top sensor is the only detection
-            Rollers running toward bottom and claw open
-         * 4. Bottom sensor is the only detection
-            Rollers running toward top and claw closed
+        /* Three states of claw to be accounted for 
+         * 1. If arm crossing over, close claw
+         * 
+         * 2. intaking and no game piece, open claw
+         * 
+         * 3. have game piece, close claw
         */
 
-        // if (!endEffector.doWeHaveGamePiece() && tiltLimit.get()) {
-        //     endEffector.openClaw();
-        // } else {
+        /* Three states of roller to be accounted for 
+         * 1. both sensors same, stop rollers
+         * 
+         * 2. top sensor only, roll down
+         * 
+         * 3. bottom sensor only, roll up
+        */
+
+        if (!endEffector.doWeHaveGamePiece() && !tiltCrossingOver.get()) {
+            endEffector.openClaw();
+        } else {
             endEffector.closeClaw();
-        //}
+        }
+
+
+        if (endEffector.getTopSensor() == endEffector.getBottomSensor()) {
+            endEffector.setRollerPower(0);
+        } else if (endEffector.getTopSensor()) {
+            endEffector.runRollersDown();
+        } else if (endEffector.getBottomSensor()) {
+            endEffector.runRollersUp();
+        } else {
+            endEffector.setRollerPower(0);
+        }
 
     }
 

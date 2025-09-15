@@ -81,10 +81,10 @@ public class RobotContainer {
             )
         );
 
-        liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt, () -> getTargetLevel()));
+        liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt, () -> getTargetLevel(), () -> endEffector.isClawClosed()));
         // liftAndTilt.setDefaultCommand(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
         
-        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector, () -> liftAndTilt.tilt.getRearLimit()));
+        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector, () -> liftAndTilt.tilt.tiltCrossingOver()));
 
         driverJoystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driverJoystick.b().whileTrue(drivetrain.applyRequest(() ->

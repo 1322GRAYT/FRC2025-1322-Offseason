@@ -30,9 +30,10 @@ public class TiltSubsystem extends SubsystemBase{
     private static final double rotationsPerDegree = 1;
     private static final double startingPointDegrees = 0;
     private static final double tiltDangerZoneStartPoint = 70; 
-    private static final double tiltDangerZoneEndPoint = 90; 
+    private static final double tiltDangerZoneEndPoint = 110; 
     private static final double maxSpeed = 1;
 
+    private boolean crossingOver = false;
 
     private PIDController tilt = new PIDController(kP, kI, kD);
     private TalonFX tiltMotor = new TalonFX(tiltMotorID);
@@ -64,9 +65,14 @@ public class TiltSubsystem extends SubsystemBase{
     }
 
     public boolean tiltCrossingOver(double target) {
-        boolean crossingFrontToBack = (getTiltPosition() < tiltDangerZoneStartPoint) && (target >= tiltDangerZoneStartPoint);
+        boolean crossingFrontToBack = (getTiltPosition() < tiltDangerZoneStartPoint) && (target >= tiltDangerZoneEndPoint);
         boolean crossingBackToFront = (getTiltPosition() > tiltDangerZoneEndPoint) && (target <= tiltDangerZoneStartPoint);
-        return crossingFrontToBack || crossingBackToFront;
+        crossingOver = crossingFrontToBack || crossingBackToFront;
+        return crossingOver;
+    }
+
+    public boolean tiltCrossingOver() {
+        return crossingOver;
     }
 
     

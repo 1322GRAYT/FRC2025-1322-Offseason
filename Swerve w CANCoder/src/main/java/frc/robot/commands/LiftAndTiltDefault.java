@@ -22,11 +22,13 @@ public class LiftAndTiltDefault extends Command {
     private final TiltSubsystem tilt;
     private double targetLift, targetTilt = 0;
     private Supplier<Integer> targetLevel;
+    private Supplier<Boolean> clawClosed;
     
-    public LiftAndTiltDefault(LiftAndTiltSubsystem liftAndTilt, Supplier<Integer> targetLevel) {
+    public LiftAndTiltDefault(LiftAndTiltSubsystem liftAndTilt, Supplier<Integer> targetLevel, Supplier<Boolean> clawClosed) {
         this.lift = liftAndTilt.lift;
         this.tilt = liftAndTilt.tilt;
         this.targetLevel = targetLevel;
+        this.clawClosed = clawClosed;
         addRequirements(liftAndTilt, lift, tilt);
     }
 
@@ -67,7 +69,7 @@ public class LiftAndTiltDefault extends Command {
         //Running PID Controllers
         //Needs to prevent running tilt axis while in danger zone, but still allow intaking
         //Needs to return to the safe zone for tilt axis if its trying to move to other side
-        if(tilt.tiltCrossingOver(targetTilt) && !lift.liftClearForRotation()) {
+        if(tilt.tiltCrossingOver(targetTilt) && !lift.liftClearForRotation() && !clawClosed.get()) {
             //Set lift to safe position
             int tempLift = 75;
             lift.setPosition(tempLift);
