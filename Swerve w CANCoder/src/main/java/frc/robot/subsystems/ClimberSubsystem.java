@@ -58,11 +58,14 @@ public class ClimberSubsystem extends SubsystemBase{
         climbTiltMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.05;
         climbTiltMotor.getConfigurator().apply(climbTiltMotorConfig);
 
+        zeroPosition();
         climbGrabMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     
-
+    public void zeroPosition() {
+        climbTiltMotor.setPosition(0);
+    }
     
 
     public void setClimbTiltPower(double power) {
@@ -109,6 +112,14 @@ public class ClimberSubsystem extends SubsystemBase{
         }
     }
 
+    public void moveTiltUpToClimb() {
+        if (climbTiltMotor.getPosition().getValueAsDouble() < -15) {
+            setClimbTiltPower(tiltUpSpeed);
+        } else {
+            setClimbTiltPower(0);
+        }
+    }
+
     public void closeGrab() {
         if (!isGrabClosed()) {
             setClimbGrabPower(grabCloseSpeed);
@@ -136,6 +147,7 @@ public class ClimberSubsystem extends SubsystemBase{
         SmartDashboard.putBoolean("Is Climber Open", isGrabOpen());
         SmartDashboard.putBoolean("Is Climber Closed", isGrabOpen());
         SmartDashboard.putBoolean("Is Climber Down", isTiltDown());
+        SmartDashboard.putNumber("Climb Tilt Position", climbTiltMotor.getPosition().getValueAsDouble());
     }
 
 }

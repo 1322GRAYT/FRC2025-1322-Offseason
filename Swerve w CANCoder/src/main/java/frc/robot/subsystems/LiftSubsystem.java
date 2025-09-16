@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,9 +30,8 @@ public class LiftSubsystem extends SubsystemBase{
     private static final double accelFeedForward = .0;
     private static final double rotationsPerInch = 1;
     private static final double startingPointInches = 0;
-    private static final double liftClearForRotationStartPoint = 65;
-    private static final double liftClearForRotationEndPoint = 85
-    ;
+    private static final double liftClearForRotationStartPoint = 35;
+    private static final double liftClearForRotationEndPoint = 55;
     private static final double maxSpeedUp = 1;
     private static final double maxSpeedDown = -0.5;
 
@@ -60,6 +61,10 @@ public class LiftSubsystem extends SubsystemBase{
     }
 
 
+    public void zeroLift() {
+        liftMotor.setPosition(0);
+    }
+
 
     public double getLiftPosition() {
         return (liftMotor.getPosition().getValueAsDouble() * rotationsPerInch) + startingPointInches;
@@ -68,7 +73,6 @@ public class LiftSubsystem extends SubsystemBase{
     public boolean liftClearForRotation() {
         return getLiftPosition() >= liftClearForRotationStartPoint && getLiftPosition() <= liftClearForRotationEndPoint;
     }
-
 
 
     public void setPower(double power) {
@@ -84,7 +88,9 @@ public class LiftSubsystem extends SubsystemBase{
         setPower(liftPID.calculate(getLiftPosition(), setPoint));
     }
 
-
+    public boolean getHomeLimit() {
+        return liftMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
+    }
 
     @Override
     public void periodic() {
@@ -94,5 +100,6 @@ public class LiftSubsystem extends SubsystemBase{
     public void smartDashboardOutput() {
         SmartDashboard.putNumber("Lift Position", getLiftPosition());
         SmartDashboard.putBoolean("Is Lift Clear for Tilt", liftClearForRotation());
+        SmartDashboard.putBoolean("Is Lift At Home", getHomeLimit());
     }
 }

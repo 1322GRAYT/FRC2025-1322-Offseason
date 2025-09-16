@@ -87,9 +87,9 @@ public class RobotContainer {
         );
 
         liftAndTilt.setDefaultCommand(new LiftAndTiltDefault(liftAndTilt, () -> getTargetLevel(), () -> endEffector.isClawClosed()));
-        // liftAndTilt.setDefaultCommand(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
+        //liftAndTilt.setDefaultCommand(new LiftAndTiltJoystick(liftAndTilt, operatorJoystick));
 
-        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector, () -> liftAndTilt.tilt.tiltCrossingOver()));
+        endEffector.setDefaultCommand(new EndEffectorDefault(endEffector, () -> liftAndTilt.tilt.tiltCrossingOver(), () -> liftAndTilt.liftAndTiltAtIntake()));
 
         climber.setDefaultCommand(new ClimberDefault(climber, () -> driverJoystick.y().getAsBoolean()));
 
@@ -135,7 +135,7 @@ public class RobotContainer {
         else if (operatorJoystick.a().getAsBoolean()) targetLevel = 2;
         else if (operatorJoystick.b().getAsBoolean()) targetLevel = 3;
         else if (operatorJoystick.y().getAsBoolean()) targetLevel = 4;
-        else if (operatorJoystick.povDown().getAsBoolean() || !endEffector.doWeHaveGamePiece()) targetLevel = 0;
+        else if (operatorJoystick.povDown().getAsBoolean() ) targetLevel = 0; //|| !endEffector.doWeHaveGamePiece()
 
         return targetLevel;
     }

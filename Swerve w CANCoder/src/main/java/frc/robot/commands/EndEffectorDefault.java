@@ -15,11 +15,12 @@ public class EndEffectorDefault extends Command {
      */
 
     private final EndEffectorSubsystem endEffector;
-    private Supplier<Boolean> tiltCrossingOver;
+    private Supplier<Boolean> tiltCrossingOver, clawAtIntake;
 
-    public EndEffectorDefault(EndEffectorSubsystem endEffector, Supplier<Boolean> tiltCrossingOver) {
+    public EndEffectorDefault(EndEffectorSubsystem endEffector, Supplier<Boolean> tiltCrossingOver, Supplier<Boolean> clawAtIntake) {
         this.endEffector = endEffector;
         this.tiltCrossingOver = tiltCrossingOver;
+        this.clawAtIntake = clawAtIntake;
         addRequirements(endEffector);
     }
 
@@ -53,9 +54,9 @@ public class EndEffectorDefault extends Command {
         }
 
 
-        if (endEffector.getTopSensor() == endEffector.getBottomSensor()) {
+        if (endEffector.getBothSensors()) {
             endEffector.setRollerPower(0);
-        } else if (endEffector.getTopSensor()) {
+        } else if (endEffector.getTopSensor() || clawAtIntake.get()) {
             endEffector.runRollersDown();
         } else if (endEffector.getBottomSensor()) {
             endEffector.runRollersUp();

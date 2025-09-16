@@ -39,11 +39,11 @@ public class EndEffectorScoring extends Command {
         if (endEffector.getBothSensors()) {
             //Both see coral
             endEffector.closeClaw();
-            endEffector.runRollersDown();
+            endEffector.runRollersUp();
         } else{
             //Bottom sees coral
             endEffector.openClaw();
-            endEffector.runRollersDown();
+            endEffector.runRollersUp();
         }
     }
 

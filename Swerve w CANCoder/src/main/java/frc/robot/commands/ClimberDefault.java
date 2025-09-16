@@ -16,6 +16,7 @@ public class ClimberDefault extends Command {
 
     private final ClimberSubsystem climber;
     private Supplier<Boolean> driverYButton;
+    private boolean climbed = false;
 
     public ClimberDefault(ClimberSubsystem climber, Supplier<Boolean> driverYButton) {
         this.climber = climber;
@@ -38,11 +39,12 @@ public class ClimberDefault extends Command {
          * 3. Climb
         */
         
-        if (climber.climbMode && driverYButton.get()) {
+        if (climber.climbMode && driverYButton.get() || climbed) {
             if (climber.isGrabClosed()) {
-                climber.moveTiltUp();
+                climber.moveTiltUpToClimb();
             } 
             climber.closeGrab();
+            if (climber.isGrabClosed() && !climber.isTiltDown()) climbed = true;
         } else if (climber.climbMode) {
             climber.moveTiltDown();
             climber.openGrab();
@@ -50,6 +52,10 @@ public class ClimberDefault extends Command {
             
             climber.moveTiltUp();
             climber.closeGrab();
+
+            if (climber.isTiltUp()) {
+                climber.zeroPosition();
+            }
         }
 
     }
