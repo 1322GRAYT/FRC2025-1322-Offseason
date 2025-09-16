@@ -22,6 +22,7 @@ public class LiftAndTiltDefault extends Command {
     private final TiltSubsystem tilt;
     private final LiftAndTiltSubsystem liftAndTilt;
     private double targetLift, targetTilt = 0;
+    private boolean liftFoundSensor, liftHomingOutOfBoundsHigh, liftHomingOutOfBoundsLow = false;
     private Supplier<Integer> targetLevel;
     private Supplier<Boolean> clawClosed;
     
@@ -100,7 +101,38 @@ public class LiftAndTiltDefault extends Command {
             SmartDashboard.putNumber("Lift Target", targetLift);
             SmartDashboard.putNumber("Tilt Target", targetTilt);
         } else {
-           // if(lift.)
+            if(lift.getHomeLimit()) {
+                lift.zeroLift();
+                liftFoundSensor = true;
+            }
+
+            if(liftFoundSensor) {
+                int tempLift = 45;
+                lift.setPosition(tempLift);
+
+                if (tilt.getHomeLimit()) {
+                    tilt.zeroTilt();
+                    liftAndTilt.homed = true;
+                } else if (lift.getLiftPosition() > 40){
+                    int tempTilt = -135;
+                    tilt.setPosition(tempTilt);
+                }
+            } else if (!liftHomingOutOfBoundsHigh) {
+                int tempLift = 20;
+                lift.setPosition(tempLift);
+                if (lift.getLiftPosition() > 15) {
+                    liftHomingOutOfBoundsHigh = true;
+                }
+            }else if (!liftHomingOutOfBoundsLow) {
+                int tempLift = -20;
+                lift.setPosition(tempLift);
+                if (lift.getLiftPosition() < -15) {
+                    liftHomingOutOfBoundsLow = true;
+                }
+            } else {
+                lift.setPower(0);
+                System.out.println("HOMING FAILED: USE MANUAL OVERRIDE");
+            }
         }
     }
 

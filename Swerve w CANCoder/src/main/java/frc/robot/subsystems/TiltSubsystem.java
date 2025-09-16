@@ -82,7 +82,7 @@ public class TiltSubsystem extends SubsystemBase{
     }
 
     
-    public boolean getRearLimit() {
+    public boolean getHomeLimit() {
         return tiltMotor.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround;
     }
 
