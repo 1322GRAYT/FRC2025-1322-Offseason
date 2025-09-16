@@ -12,6 +12,12 @@ public class LiftAndTiltSubsystem extends SubsystemBase{
         tilt.zeroTilt();
     }
 
+    public void haveWeHomed(boolean homed) {
+        lift.haveWeHomed(homed);
+        tilt.haveWeHomed(homed);
+        this.homed = homed;
+    }
+
     public boolean liftAndTiltAtIntake() {
         return ((tilt.getTiltPosition() > TiltSubsystem.tiltDangerZoneEndPoint) && lift.getLiftPosition() < 35);
     }

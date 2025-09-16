@@ -35,7 +35,7 @@ public class LiftSubsystem extends SubsystemBase{
     private static final double maxSpeedUp = 1;
     private static final double maxSpeedDown = -0.5;
 
-
+    private boolean homed = false;
 
     private PIDController liftPID = new PIDController(kP, kI, kD);
     private TalonFX liftMotor = new TalonFX(liftMotorID);
@@ -60,6 +60,9 @@ public class LiftSubsystem extends SubsystemBase{
         liftMotor.getConfigurator().apply(liftMotorConfig);
     }
 
+    public void haveWeHomed(boolean homed) {
+        this.homed = homed;
+    }
 
     public void zeroLift() {
         liftMotor.setPosition(0);

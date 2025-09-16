@@ -33,6 +33,7 @@ public class TiltSubsystem extends SubsystemBase{
     private static final double maxSpeed = 1;
 
     private boolean crossingOver = false;
+    private boolean homed = false;
 
     private PIDController tilt = new PIDController(kP, kI, kD);
     private TalonFX tiltMotor = new TalonFX(tiltMotorID);
@@ -57,6 +58,9 @@ public class TiltSubsystem extends SubsystemBase{
         tiltMotor.getConfigurator().apply(tiltMotorConfig);
     }
 
+    public void haveWeHomed(boolean homed) {
+        this.homed = homed;
+    }
 
     public void zeroTilt() {
         tiltMotor.setPosition(0);
@@ -74,7 +78,7 @@ public class TiltSubsystem extends SubsystemBase{
     }
 
     public boolean tiltCrossingOver() {
-        return crossingOver || tiltInDangerZone();
+        return crossingOver || tiltInDangerZone() && homed;
     }
 
     public boolean tiltInDangerZone() {
