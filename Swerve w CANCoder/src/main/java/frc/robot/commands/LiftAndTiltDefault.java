@@ -116,6 +116,7 @@ public class LiftAndTiltDefault extends Command {
                 } else if (lift.getLiftPosition() > 40){
                     int tempTilt = -135;
                     tilt.setPosition(tempTilt);
+                    
                 }
             } else if (!liftHomingOutOfBoundsHigh) {
                 int tempLift = 20;

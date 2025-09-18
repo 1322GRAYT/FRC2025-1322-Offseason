@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,7 +34,6 @@ public class TiltSubsystem extends SubsystemBase{
     private static final double maxSpeed = 1;
 
     private boolean crossingOver = false;
-    private boolean homed = false;
 
     private PIDController tilt = new PIDController(kP, kI, kD);
     private TalonFX tiltMotor = new TalonFX(tiltMotorID);
@@ -58,10 +58,6 @@ public class TiltSubsystem extends SubsystemBase{
         tiltMotor.getConfigurator().apply(tiltMotorConfig);
     }
 
-    public void haveWeHomed(boolean homed) {
-        this.homed = homed;
-    }
-
     public void zeroTilt() {
         tiltMotor.setPosition(0);
     }
@@ -78,16 +74,15 @@ public class TiltSubsystem extends SubsystemBase{
     }
 
     public boolean tiltCrossingOver() {
-        return crossingOver || tiltInDangerZone() && homed;
+        return crossingOver || tiltInDangerZone();
     }
 
     public boolean tiltInDangerZone() {
-        return ((getTiltPosition() > tiltDangerZoneStartPoint) && (getTiltPosition() < tiltDangerZoneEndPoint));
+        return ((getTiltPosition() > tiltDangerZoneStartPoint) && (getTiltPosition() < tiltDangerZoneEndPoint)) || (getTiltPosition() < -5);
     }
 
-    
     public boolean getHomeLimit() {
-        return tiltMotor.getForwardLimit().getValue() == ForwardLimitValue.ClosedToGround;
+        return tiltMotor.getReverseLimit().getValue() == ReverseLimitValue.ClosedToGround;
     }
 
 
@@ -112,5 +107,6 @@ public class TiltSubsystem extends SubsystemBase{
 
     public void smartDashboardOutput() {
         SmartDashboard.putNumber("Tilt Position", getTiltPosition());
+        SmartDashboard.putBoolean("Get Home Sensor", getHomeLimit());
     }
 }
