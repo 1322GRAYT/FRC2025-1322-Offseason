@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.564241803278687,
-        "y": 4.150870901639344
+        "x": 5.71813524590164,
+        "y": 5.7212602459016395
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.988831967213113,
-        "y": 4.162858606557377
+        "x": 5.5383196721311485,
+        "y": 5.409579918032787
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "OUC_END_1"
     },
     {
       "anchor": {
-        "x": 5.897950819672132,
-        "y": 4.150870901639344
+        "x": 5.322540983606557,
+        "y": 5.1098872950819665
       },
       "prevControl": {
-        "x": 6.341495901639344,
-        "y": 4.138883196721311
+        "x": 5.485238826970549,
+        "y": 5.299701445673291
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "score"
+      "linkedName": "OUC_END_2"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Our Cage",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

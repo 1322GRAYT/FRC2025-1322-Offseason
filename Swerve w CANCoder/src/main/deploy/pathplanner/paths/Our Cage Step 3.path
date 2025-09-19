@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.322540983606557,
+        "y": 5.1098872950819665
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.478381147540984,
+        "y": 5.313678278688524
+      },
+      "isLocked": false,
+      "linkedName": "OUC_END_2"
+    },
+    {
+      "anchor": {
+        "x": 5.71813524590164,
+        "y": 5.7212602459016395
+      },
+      "prevControl": {
+        "x": 5.634930216467855,
+        "y": 5.485512662505917
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "OUC_END_1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Our Cage",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

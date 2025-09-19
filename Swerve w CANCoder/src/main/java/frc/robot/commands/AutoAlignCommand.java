@@ -71,9 +71,10 @@ public class AutoAlignCommand extends Command{
         if (DriverStation.getAlliance().get() == Alliance.Red) {
             newForward *= -1;
             newStrafe *= -1;
-            newRotation -= Math.PI;
         } 
-
+        
+        newRotation -= Math.PI;
+        
         swerveRequest = driveFacingAngle
             .withTargetDirection(Rotation2d.fromRadians(newRotation))
             .withVelocityX(newForward)
