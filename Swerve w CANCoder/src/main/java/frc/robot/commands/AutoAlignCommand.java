@@ -63,7 +63,7 @@ public class AutoAlignCommand extends Command{
         double output = pid.calculate(distanceAway, 0);
 
 
-        double newRotation = targetPose.getRotation().getDegrees();
+        double newRotation = targetPose.getRotation().getRadians();
         double newForward = output * Math.cos(angleOfDistance);
         double newStrafe = output * Math.sin(angleOfDistance);
         
@@ -71,11 +71,11 @@ public class AutoAlignCommand extends Command{
         if (DriverStation.getAlliance().get() == Alliance.Red) {
             newForward *= -1;
             newStrafe *= -1;
-            newRotation -= 180;
+            newRotation -= Math.PI;
         } 
 
         swerveRequest = driveFacingAngle
-            .withTargetDirection(Rotation2d.fromDegrees(newRotation))
+            .withTargetDirection(Rotation2d.fromRadians(newRotation))
             .withVelocityX(newForward)
             .withVelocityY(newStrafe);
 
