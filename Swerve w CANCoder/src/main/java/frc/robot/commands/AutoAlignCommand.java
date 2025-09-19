@@ -30,8 +30,8 @@ public class AutoAlignCommand extends Command{
         .withRotationalDeadband(0.05);
 
     private final ProfiledPIDController pid = new ProfiledPIDController(
-        1.5, 0, 0, 
-        new TrapezoidProfile.Constraints((2 * 0.02), (1 * 0.02)) //Max speed of 2 m/s with a max acceleration of 1 m/s/s converted to run time of 20ms
+        3, 0, 0, 
+        new TrapezoidProfile.Constraints((2 * 0.02), (1 * 0.02)) //Max speed of 2 m/s with a max acceleration of 1 m/s/s converted to loop time of 20ms
     );    
     private PhoenixPIDController turnPID = new PhoenixPIDController(7, 0, 0);
 
