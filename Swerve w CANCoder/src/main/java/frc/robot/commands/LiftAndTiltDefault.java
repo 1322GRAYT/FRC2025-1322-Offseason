@@ -57,16 +57,17 @@ public class LiftAndTiltDefault extends Command {
                     targetTilt = 0;
                     break;
                 case 3:
-                    targetLift = 60;
+                    targetLift = 57;
                     targetTilt = 0;
                     break;
                 case 4:
-                    targetLift = 113;
+                    targetLift = 110;
                     targetTilt = 0;
                     break;
                 default:
                     //At intake position until otherwise stated
-                    targetLift = 27;
+                    targetLift = 26
+                    ;
                     targetTilt = 135;
                     break;
 
@@ -116,7 +117,7 @@ public class LiftAndTiltDefault extends Command {
                 } else if (lift.getLiftPosition() > 40){
                     int tempTilt = -135;
                     tilt.setPosition(tempTilt);
-                    
+
                 }
             } else if (!liftHomingOutOfBoundsHigh) {
                 int tempLift = 20;

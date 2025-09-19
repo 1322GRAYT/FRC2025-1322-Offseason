@@ -56,7 +56,7 @@ public class EndEffectorDefault extends Command {
 
         if (endEffector.getBothSensors()) {
             endEffector.setRollerPower(0);
-        } else if (endEffector.getTopSensor() || clawAtIntake.get()) {
+        } else if (endEffector.getTopSensor() || (clawAtIntake.get() && !endEffector.getBottomSensor())) {
             endEffector.runRollersDown();
         } else if (endEffector.getBottomSensor()) {
             endEffector.runRollersUp();

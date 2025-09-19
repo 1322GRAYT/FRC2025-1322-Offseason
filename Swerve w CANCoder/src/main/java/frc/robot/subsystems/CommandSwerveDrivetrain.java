@@ -78,7 +78,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0, 0),
+                    new PIDConstants(2, 0, 0),
                     // PID constants for rotation
                     new PIDConstants(7, 0, 0)
                 ),
@@ -124,11 +124,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
 
         smartDashboardOutput();
-        if (SmartDashboard.getBoolean("Update Robot Angle Using Vision?", true)) {
+        if (!DriverStation.isAutonomousEnabled() ) {
             updateRobotPoseMT1();
-        } else {
-            updateRobotPoseMT2();
-        }
+        } 
     }
 
     public void smartDashboardOutput() {
@@ -182,7 +180,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
       if(updateVision)
       {
         //SmartDashboard.putNumber("Hello", mt1.pose.getX());
-        setVisionMeasurementStdDevs(VecBuilder.fill(.05,.05,Math.toRadians(1)));
+        setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,Math.toRadians(10)));
         addVisionMeasurement(
             mt1.pose,
             Utils.fpgaToCurrentTime(mt1.timestampSeconds));
@@ -236,12 +234,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final Pose2d TAG_TWENTY_TWO = new Pose2d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Rotation2d.fromDegrees(-60));
 
     //Offsets to branch
-    private static final double tagToLeftBranch = Units.inchesToMeters(-6);
-    private static final double tagToRightBranch = Units.inchesToMeters(6);
-    private static final double targetDistanceFromTag = Units.inchesToMeters(15);
+    private static final double tagToLeftBranch = Units.inchesToMeters(-7.5);
+    private static final double tagToRightBranch = Units.inchesToMeters(7.5);
+    private static final double targetDistanceFromTag = Units.inchesToMeters(16);
 
-    private static final double leftBoundOfReef = (TAG_SIX.getY() + TAG_SEVEN.getY()) / 2;
-    private static final double rightBoundOfReef = (TAG_EIGHT.getY() + TAG_SEVEN.getY()) / 2;
+    private static final double leftBoundOfReef = ((TAG_SIX.getY() + TAG_ELEVEN.getY()) / 2) ;
+    private static final double rightBoundOfReef = (TAG_EIGHT.getY() + TAG_NINE.getY()) / 2;
 
     private boolean isLeftBranch = true;
 
@@ -291,9 +289,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             }
         }
 
-        outputPose.transformBy(new Transform2d(
-            isLeftBranch ? tagToLeftBranch : tagToRightBranch, //Left or Right
+        outputPose = outputPose.transformBy(new Transform2d(
             targetDistanceFromTag, //Offset back from reef
+            isLeftBranch ? tagToLeftBranch : tagToRightBranch, //Left or Right
             outputPose.getRotation()
         ));
 

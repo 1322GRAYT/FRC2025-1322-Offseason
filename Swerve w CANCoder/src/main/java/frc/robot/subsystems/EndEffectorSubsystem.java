@@ -28,10 +28,10 @@ public class EndEffectorSubsystem extends SubsystemBase{
     private static final int bottomSensorID = 1;
     private static final double closeClawSpeed = 1;
     private static final double openClawSpeed = -1;
-    private static final double rollerUpSpeed = 0.5;
-    private static final double rollerDownSpeed = -0.5;
+    private static final double rollerUpSpeed = 0.25;
+    private static final double rollerDownSpeed = -0.25;
     private static final double maxSpeedClaw = 1;
-    private static final double maxSpeedRoller = 1;
+    private static final double maxSpeedRoller = 0.5;
 
 
     private TalonFX clawMotor = new TalonFX(clawMotorID);
@@ -70,7 +70,7 @@ public class EndEffectorSubsystem extends SubsystemBase{
 
         TalonFXConfiguration rollerMotorConfig = new TalonFXConfiguration();
         rollerMotorConfig.withCurrentLimits(rollerCurrentLimit);
-        rollerMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        rollerMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         rollerMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         rollerMotorConfig.Voltage.PeakForwardVoltage = 12;
         rollerMotorConfig.Voltage.PeakReverseVoltage = -12;
